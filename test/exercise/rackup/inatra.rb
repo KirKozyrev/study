@@ -1,10 +1,17 @@
 module Inatra
   class << self
-    def routes
+    def routes(&block)
+      @route = {}
+      instance_eval(&block)
+    end
+
+    def method_missing(method, *args, &block)
+      @route[method.to_s] = {}
+      @route[method.to_s][args[0]] = block
     end
 
     def call(env)
-      [200, {"Content-Type" => "text/html"}, ["Hello World"]]
+      @route[env['REQUEST_METHOD'].downcase][env['PATH_INFO']].call
     end
   end
 end
