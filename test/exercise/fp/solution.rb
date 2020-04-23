@@ -4,8 +4,8 @@ module Exercise
       def rating(films)
         films_rates = 
           films.select { |film| 
-            (!film["rating_kinopoisk"].nil? && film["rating_kinopoisk"].to_f > 0) && 
-            (!film["country"].nil? && film["country"].split(",").length > 1)
+            (film["rating_kinopoisk"].present? && film["rating_kinopoisk"].to_f > 0) && 
+            (film["country"].present? && film["country"].split(",").length > 1)
           }.map { |film|
             film["rating_kinopoisk"].to_f
           }
@@ -17,7 +17,7 @@ module Exercise
       def chars_count(films, threshold)
         count_char = 
           films.select { |film| 
-            !film["rating_kinopoisk"].nil? && film["rating_kinopoisk"].to_f >= threshold
+            film["rating_kinopoisk"].present? && film["rating_kinopoisk"].to_f >= threshold
           }.map { |film|
             film["name"].count('и')
           }
