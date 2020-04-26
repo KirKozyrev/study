@@ -17,40 +17,28 @@ module Exercise
       end
 
       # Написать свою функцию my_map
-      def my_map
-        result = MyArray.new
-
-        my_each do |item|
-          result.push(yield(item))
-        end
-
-        result
+      def my_map(&block)
+        self.my_reduce(MyArray.new, &(lambda{ |result, item| result.push(block.call(item)) }))
       end
 
       # Написать свою функцию my_compact
       def my_compact
-        result = MyArray.new
-
-        my_each do |item| 
-          result.push(item) if item != nil
-        end
-
-        result
+        self.my_reduce(MyArray.new, &(lambda{ |result, item| item.nil? ? result : result.push(item)}))
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(init = nil)
-        result = init
+      def my_reduce(result = nil, &block)
+        return result if self.empty?
 
-        my_each do |item|
-          if result.nil?
-            result = item
-          else
-            result = yield(result, item)
-          end
+        if result == nil 
+          result = self.first
+          first, *rest = self
+        else 
+          first, *rest = self
+          result = block.call(result, first)
         end
 
-        result
+        MyArray.new(rest).my_reduce(result, &block);
       end
     end
   end
