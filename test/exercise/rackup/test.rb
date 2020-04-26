@@ -7,7 +7,7 @@ require_relative './my_app'
 class RackTest < Test::Unit::TestCase
   def test_it_says_hello_world
     browser = Rack::Test::Session.new(Rack::MockSession.new(Inatra))
-    browser.get '/hello'
+    browser.post '/hello'
     assert browser.last_response.ok?
     assert_equal 'Hello World', browser.last_response.body
   end
