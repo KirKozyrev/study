@@ -18,12 +18,20 @@ module Exercise
 
       # Написать свою функцию my_map
       def my_map(&block)
-        self.my_reduce(MyArray.new, &(lambda{ |result, item| result.push(block.call(item)) }))
+        self.my_reduce(MyArray.new, &(lambda do |result, item|
+           result.push(block.call(item))
+        end))
       end
 
       # Написать свою функцию my_compact
       def my_compact
-        self.my_reduce(MyArray.new, &(lambda{ |result, item| item.nil? ? result : result.push(item)}))
+        self.my_reduce(MyArray.new, &(lambda do |result, item|
+           if item.nil?
+             result 
+           else 
+            result.push(item)
+           end
+        end))
       end
 
       # Написать свою функцию my_reduce
